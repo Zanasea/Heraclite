@@ -104,7 +104,9 @@ public class JSONFileManagerTest {
     public void testWriteWithValidExtrant() {
         PersistanceManager classUnderTest = new JSONFileManager(validJson, outputDirectory, htmlOutputDirectory);
         classUnderTest.write(new Extrant(classUnderTest.read()));
-        Assert.assertTrue(new File(outputDirectory, validJson.getName()).exists());
+        File writtenFile = new File(outputDirectory, validJson.getName());
+        Assert.assertTrue(writtenFile.exists());
+        writtenFile.deleteOnExit();
     }
     
     @Test
@@ -118,13 +120,15 @@ public class JSONFileManagerTest {
     public void testWriteWithValidHtml() {
         PersistanceManager classUnderTest = new JSONFileManager(validJson, outputDirectory, htmlOutputDirectory);
         classUnderTest.write(new Extrant(classUnderTest.read()));
-        Assert.assertTrue(new File(htmlOutputDirectory, validJson.getName()).exists());
+        File writtenFile = new File(htmlOutputDirectory, validJson.getName() + ".html");
+        Assert.assertTrue(writtenFile.exists());
+        writtenFile.delete();
     }
     
     @Test
     public void testDoesNotWriteWithInvalidHtml() {
         PersistanceManager classUnderTest = new JSONFileManager(validJson, outputDirectory, invalidHtmlOutputDirectory);
         classUnderTest.write(new Extrant(classUnderTest.read()));
-        Assert.assertFalse(new File(invalidHtmlOutputDirectory, validJson.getName()).exists());
+        Assert.assertFalse(new File(invalidHtmlOutputDirectory, validJson.getName() + ".html").exists());
     }
 }
