@@ -13,3 +13,5 @@ build.xml
 /htmlResults/
 doc/*~
 testResults/
+.project
+.classpath
