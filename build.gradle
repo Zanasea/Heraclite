@@ -1,0 +1,50 @@
+//
+// Louis Martin 2011-10-11
+//
+// Fichier à inclure sous le répertoire principal de votre dépôt Githu
+//
+apply plugin: "java"
+repositories {
+    mavenCentral()
+}
+// Inscrivez les dépendances à des bibliothèques externes
+// Le site de MavenCentral contient les paramètres à inclure
+// Les dépendances ci-dessous sont à titre d'illustration
+dependencies {
+    compile 'org.codehaus.jackson:jackson-core-asl:1.8.5'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.8.5'
+    testCompile 'junit:junit:4.9'
+}
+// Indiquez le chemin à partir du présent fichier vers votre code source
+// Ci-dessous le chemin utilisé est celui pour un projet NetBeans
+sourceSets {
+    main {
+        java {
+            srcDir 'src' 
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+    test {
+        java {
+            srcDir 'test' 
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}
+
+task generatePDF << {
+	"""xslutil dbToPDF doc/documentation.xml doc/documentation.pdf""".execute()
+}
+
+build.dependsOn(generatePDF)
+
+jar {
+	from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	manifest {
+		attributes 'Main-Class': 'ca.uqam.inf2015.aut2011.tp2.heraclite.Main'
+	}
+}

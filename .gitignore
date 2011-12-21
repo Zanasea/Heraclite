@@ -1,0 +1,15 @@
+/src/result/
+/src/results/
+/results/
+/resources/
+/build/
+*/.DS_Store
+/nbproject/
+/dist/
+/.gradle
+manifest.mf
+build.xml
+.DS_Store
+/htmlResults/
+doc/*~
+testResults/

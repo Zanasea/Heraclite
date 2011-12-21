@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="fr">
+  <articleinfo>
+    <title>TP2 INF2015 AUT 2011</title>
+
+    <author>
+      <firstname>Éric Brisson</firstname>
+    </author>
+
+    <author>
+      <firstname>Jean-François Gagnon</firstname>
+    </author>
+
+    <author>
+      <firstname>Jérémie Mallette-Lachance</firstname>
+    </author>
+
+    <author>
+      <firstname>INF2015 Gr.41 - Héraclite</firstname>
+    </author>
+
+    <pubdate>8 décembre 2011</pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Spécifications du logiciel</title>
+
+    <para>Ce logiciel permet de calculer les modalités de remboursement de
+    prêt.</para>
+
+    <section>
+      <title>Intrant</title>
+
+      <para>Il y a un intrant au programme : un répertoire contenant un
+      certain nombre de fichiers de type JSON, chaque fichier décrivant les
+      paramètres initiaux d’un prêt à traiter.</para>
+    </section>
+
+    <section>
+      <title>Extrant</title>
+
+      <para>Il y a un premier extrant au programme : un répertoire contenant,
+      pour chaque fichier en intrant, un fichier de type JSON décrivant les
+      modalités de remboursement du prêt.</para>
+
+      <para>Il y a un deuxième extrant au programme : un répertoire contenant,
+      pour chaque fichier en intrant, un fichier de type HTML décrivant les
+      modalités de remboursement du prêt.</para>
+    </section>
+
+    <section>
+      <title>Éxecution</title>
+
+      <para>Le programme peut s'exécuter à partir d'une ligne de commande de
+      la façon suivante:</para>
+
+      <programlisting>java -jar heraclite.jar dirIntrant dirExtrantJson dirExtrantHtml</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Entrées et Sorties</title>
+
+    <section>
+      <title>Intrant nécessaire aux calculs</title>
+
+      <para>Les Intrants sont les fichiers sources que l'on utilise pour
+      obtenir les valeurs de base des prêts hypothécaires. Les valeurs sont
+      lues dans sans accorder d'importance à l'ordre. L'ensemble des valeurs
+      requises et leurs types sont les suivantes:</para>
+
+      <para>Liste des champs<itemizedlist mark="opencircle">
+          <listitem>
+            id : champ texte
+          </listitem>
+
+          <listitem>
+            description : champ texte
+          </listitem>
+
+          <listitem>
+            montant : numérique supérieur à 0
+          </listitem>
+
+          <listitem>
+            nombreAnnee : numérique supérieur à 0
+          </listitem>
+
+          <listitem>
+            frequenceRemboursement : numérique supérieur à 0
+          </listitem>
+
+          <listitem>
+            tauxInteret : numérique supérieur à 0
+          </listitem>
+
+          <listitem>
+            frequenceComposition : numérique supérieur à 0
+          </listitem>
+        </itemizedlist></para>
+
+      <para>Il est important de noter que le nom du champ est important, il
+      doit être écrit comme présenté ci-haut dans le fichier json. S'il y a un
+      problème de lecture ou de données, il n'y aura pas de fichier écrit pour
+      ce fichier Intrant.</para>
+    </section>
+
+    <section>
+      <title>Extrant produit par les calculs</title>
+
+      <para>Les Extrant sont les fichiers produits qui contiennent les
+      résultats des calculs pour les prêts hypothécaires. Chaque fichier
+      Intrant produit en résultat un fichier Extrant associé. Les fichiers
+      extrant sont écrits dans le répertoire de résultat des fichiers Extrant
+      selon la même arborescence de répertoire que le fichier Intrant associé.
+      Ainsi, un fichier Intrant se trouvant à cet endroit
+      "Intrant/sousRepertoire/json.json" produira le fichier extrant suivant
+      "Extrant/sousRepertoire/json.json". Tous les champs d'un fichier intrant
+      sont reproduit dans le fichier extrant associé. Nous y trouverons
+      également une liste d'amortissement contant chacun les informations
+      supplémentaires suivantes:</para>
+
+      <para>Liste des champs d' amortissement<itemizedlist mark="opencircle">
+          <listitem>
+            periode
+          </listitem>
+
+          <listitem>
+            capitalDebut
+          </listitem>
+
+          <listitem>
+            versementTotal
+          </listitem>
+
+          <listitem>
+            versementInteret
+          </listitem>
+
+          <listitem>
+            versementCapital
+          </listitem>
+
+          <listitem>
+            capitalFin
+          </listitem>
+
+          <listitem>
+            versementTotalCumulatif
+          </listitem>
+
+          <listitem>
+            versementInteretCumulatif
+          </listitem>
+
+          <listitem>
+            versementCapitalCumulatif
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Écriture de la page HTML</title>
+
+      <para>Suite au calcul et à la création des Extrants à partir des
+      Intrants, ces derniers sont également exportés au format HTML. Ces
+      fichiers sont écrits dans le répertoire de résultat de la sortie HTML
+      spécifié en paramètre lors de l'exécution du programme. Le fichier HTML
+      porte le même nom que le fichier de sortie JSON avec l'extension
+      .html.</para>
+
+      <para>L'information disponible dans les fichiers HTML est la même que
+      celle qui se retrouve dans les fichiers JSON, soit toutes les données se
+      trouvant dans les Extrants suite au calcul des amortissements. Le
+      fichier HTML est composé d'une entête qui présente l'information
+      générale sur le prêt et un tableau présentant l'information détaillée
+      des versements pour chacune des périodes composant le prêt.</para>
+
+      <para>Information se retrouvant dans l'entête : <itemizedlist
+          mark="opencircle">
+          <listitem>
+            Id
+          </listitem>
+
+          <listitem>
+            Description
+          </listitem>
+
+          <listitem>
+            Montant
+          </listitem>
+
+          <listitem>
+            Nombre d'années
+          </listitem>
+
+          <listitem>
+            Taux d'intérêts
+          </listitem>
+
+          <listitem>
+            Fréquence de composition
+          </listitem>
+
+          <listitem>
+            Versement périodique
+          </listitem>
+        </itemizedlist></para>
+
+      <para>L'information se retrouvant dans le tableau affichant chacune des
+      périodes d'amortissement du prêt : <itemizedlist mark="opencircle">
+          <listitem>
+            Période
+          </listitem>
+
+          <listitem>
+            Capital début
+          </listitem>
+
+          <listitem>
+            Versement total
+          </listitem>
+
+          <listitem>
+            Versement intérêt
+          </listitem>
+
+          <listitem>
+            Versement capital
+          </listitem>
+
+          <listitem>
+            Versement total cumulatif
+          </listitem>
+
+          <listitem>
+            Versement intérêt cumulatif
+          </listitem>
+
+          <listitem>
+            Versement capital cumulatif
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+</article>
