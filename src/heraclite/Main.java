@@ -28,9 +28,9 @@ public class Main {
         calculator.start();
       }
     } else {
-
-      String errorMessage = "Principale needs 3 parameters. The first has to be the input directory, the second has to be the output directory and the third one the HTLM Output directory.";
-      printErrorMessageAndExit(errorMessage);
+      GUI gui = new SwingGUI();
+      gui.init();
+      gui.display();
     }
   }
 
@@ -50,8 +50,4 @@ public class Main {
     return path.substring(directory.getAbsolutePath().length());
   }
 
-  private static void printErrorMessageAndExit(String message) {
-    System.err.println(message);
-    System.exit(-1);
-  }
 }
