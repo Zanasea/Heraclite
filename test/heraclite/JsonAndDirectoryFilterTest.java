@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ca.uqam.inf2015.aut2011.tp2.heraclite;
+package heraclite;
 
 import heraclite.JsonAndDirectoryFilter;
 

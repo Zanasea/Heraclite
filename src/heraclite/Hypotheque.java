@@ -5,31 +5,31 @@ import javax.management.InvalidAttributeValueException;
 
 public interface Hypotheque {
 
-    public String getDescription();
+  public String getDescription();
 
-    public void setDescription(String description);
+  public void setDescription(String description);
 
-    public BigDecimal getFrequenceComposition();
+  public BigDecimal getFrequenceComposition();
 
-    public void setFrequenceComposition(BigDecimal frequenceComposition) throws InvalidAttributeValueException;
+  public void setFrequenceComposition(BigDecimal frequenceComposition) throws InvalidAttributeValueException;
 
-    public BigDecimal getFrequenceRemboursement();
+  public BigDecimal getFrequenceRemboursement();
 
-    public void setFrequenceRemboursement(BigDecimal frequenceRemboursement) throws InvalidAttributeValueException;
+  public void setFrequenceRemboursement(BigDecimal frequenceRemboursement) throws InvalidAttributeValueException;
 
-    public String getId();
+  public String getId();
 
-    public void setId(String id);
+  public void setId(String id);
 
-    public BigDecimal getMontant();
+  public BigDecimal getMontant();
 
-    public void setMontant(BigDecimal montant) throws InvalidAttributeValueException;
+  public void setMontant(BigDecimal montant) throws InvalidAttributeValueException;
 
-    public BigDecimal getNombreAnnee();
+  public BigDecimal getNombreAnnee();
 
-    public void setNombreAnnee(BigDecimal nombreAnnee) throws InvalidAttributeValueException;
+  public void setNombreAnnee(BigDecimal nombreAnnee) throws InvalidAttributeValueException;
 
-    public BigDecimal getTauxInteret();
+  public BigDecimal getTauxInteret();
 
-    public void setTauxInteret(BigDecimal tauxInteret) throws InvalidAttributeValueException;
+  public void setTauxInteret(BigDecimal tauxInteret) throws InvalidAttributeValueException;
 }

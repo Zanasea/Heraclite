@@ -5,26 +5,25 @@ import java.io.FileFilter;
 
 public class JsonAndDirectoryFilter implements FileFilter {
 
-    @Override
-    public boolean accept(File file) {
+  @Override
+  public boolean accept(File file) {
 
-        return file.isDirectory() || isOfASupportedExtension(file);
-    }
+    return file.isDirectory() || isOfASupportedExtension(file);
+  }
 
-    private boolean isOfASupportedExtension(File file) {
-        boolean isSupported = true;
+  private boolean isOfASupportedExtension(File file) {
+    boolean isSupported = true;
 
-        int indexOfFileExtension = file.getName().lastIndexOf(".");
-        String fileName = file.getName();
-        String supportedExtension = ".json";
+    int indexOfFileExtension = file.getName().lastIndexOf(".");
+    String fileName = file.getName();
+    String supportedExtension = ".json";
 
-        isSupported = hasFileExtension(indexOfFileExtension)
-                && fileName.substring(indexOfFileExtension).equalsIgnoreCase(supportedExtension);
+    isSupported = hasFileExtension(indexOfFileExtension) && fileName.substring(indexOfFileExtension).equalsIgnoreCase(supportedExtension);
 
-        return isSupported;
-    }
+    return isSupported;
+  }
 
-    private boolean hasFileExtension(int indexOfFileExtension) {
-        return indexOfFileExtension >= 0;
-    }
+  private boolean hasFileExtension(int indexOfFileExtension) {
+    return indexOfFileExtension >= 0;
+  }
 }

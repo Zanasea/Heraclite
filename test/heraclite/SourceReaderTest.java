@@ -1,4 +1,4 @@
-package ca.uqam.inf2015.aut2011.tp2.heraclite;
+package heraclite;
 
 import heraclite.SourceReader;
 
