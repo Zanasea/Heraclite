@@ -1,6 +1,7 @@
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
-import ca.uqam.inf2015.aut2011.tp2.heraclite.SourceReader;
+import heraclite.SourceReader;
+
 import java.io.File;
 import java.util.ArrayList;
 import junit.framework.Assert;

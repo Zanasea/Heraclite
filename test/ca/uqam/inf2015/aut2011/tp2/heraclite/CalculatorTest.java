@@ -1,10 +1,11 @@
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
-import ca.uqam.inf2015.aut2011.tp2.heraclite.JSONFileManager;
-import ca.uqam.inf2015.aut2011.tp2.heraclite.Extrant;
-import ca.uqam.inf2015.aut2011.tp2.heraclite.Amortissement;
-import ca.uqam.inf2015.aut2011.tp2.heraclite.PersistanceManager;
-import ca.uqam.inf2015.aut2011.tp2.heraclite.Calculator;
+import heraclite.Amortissement;
+import heraclite.Calculator;
+import heraclite.Extrant;
+import heraclite.JSONFileManager;
+import heraclite.PersistanceManager;
+
 import java.io.File;
 import java.math.BigDecimal;
 import org.codehaus.jackson.map.ObjectMapper;

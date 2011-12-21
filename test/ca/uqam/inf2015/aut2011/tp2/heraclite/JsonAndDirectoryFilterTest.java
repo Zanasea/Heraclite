@@ -4,7 +4,8 @@
  */
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
-import ca.uqam.inf2015.aut2011.tp2.heraclite.JsonAndDirectoryFilter;
+import heraclite.JsonAndDirectoryFilter;
+
 import java.io.File;
 import junit.framework.Assert;
 import org.junit.Test;

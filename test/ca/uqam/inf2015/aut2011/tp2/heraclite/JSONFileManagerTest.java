@@ -1,5 +1,9 @@
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
+import heraclite.Extrant;
+import heraclite.JSONFileManager;
+import heraclite.PersistanceManager;
+
 import java.io.File;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;

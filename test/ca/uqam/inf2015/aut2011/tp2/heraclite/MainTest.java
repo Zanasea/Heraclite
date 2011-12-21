@@ -1,6 +1,7 @@
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
-import ca.uqam.inf2015.aut2011.tp2.heraclite.Main;
+import heraclite.Main;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

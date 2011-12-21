@@ -1,6 +1,7 @@
 package ca.uqam.inf2015.aut2011.tp2.heraclite;
 
-import static ca.uqam.inf2015.aut2011.tp2.heraclite.ArgsValidator.isValid;
+import static heraclite.ArgsValidator.isValid;
+
 import java.io.File;
 import java.io.IOException;
 import junit.framework.Assert;
