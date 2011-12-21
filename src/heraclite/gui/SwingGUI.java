@@ -1,4 +1,4 @@
-package heraclite;
+package heraclite.gui;
 
 import java.awt.Dimension;
 
@@ -19,11 +19,6 @@ public class SwingGUI extends JFrame implements GUI {
   @Override
   public void display() {
     this.setVisible(true);
-  }
-
-  @Override
-  public void destroy() {
-    this.destroy();
   }
 
 }

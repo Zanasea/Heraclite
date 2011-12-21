@@ -1,9 +1,11 @@
-package heraclite;
+package heraclite.dto;
+
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
+
 
 /**
  * Les noms de variable et de méthodes sont en français afin que celles-ci

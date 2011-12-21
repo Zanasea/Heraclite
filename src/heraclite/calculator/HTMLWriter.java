@@ -1,9 +1,13 @@
-package heraclite;
+package heraclite.calculator;
+
+import heraclite.dto.Amortissement;
+import heraclite.dto.Extrant;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 
 public class HTMLWriter {
 

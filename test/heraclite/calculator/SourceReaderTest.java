@@ -1,6 +1,6 @@
-package heraclite;
+package heraclite.calculator;
 
-import heraclite.SourceReader;
+import heraclite.calculator.SourceReader;
 
 import java.io.File;
 import java.util.ArrayList;

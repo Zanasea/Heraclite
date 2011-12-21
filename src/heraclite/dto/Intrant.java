@@ -1,7 +1,8 @@
-package heraclite;
+package heraclite.dto;
 
 import java.math.BigDecimal;
 import javax.management.InvalidAttributeValueException;
+
 
 /**
  * Les noms de variable et de méthodes sont en français afin que celles-ci soit

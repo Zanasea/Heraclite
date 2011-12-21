@@ -1,10 +1,10 @@
-package heraclite;
+package heraclite.calculator;
 
-import heraclite.Amortissement;
-import heraclite.Calculator;
-import heraclite.Extrant;
-import heraclite.JSONFileManager;
-import heraclite.PersistanceManager;
+import heraclite.calculator.Calculator;
+import heraclite.calculator.JSONFileManager;
+import heraclite.calculator.PersistanceManager;
+import heraclite.dto.Amortissement;
+import heraclite.dto.Extrant;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Before;
+
 
 public class CalculatorTest {
 

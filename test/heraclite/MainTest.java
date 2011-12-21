@@ -1,6 +1,5 @@
 package heraclite;
 
-import heraclite.Main;
 
 import java.io.File;
 import java.lang.reflect.Field;

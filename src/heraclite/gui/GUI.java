@@ -1,8 +1,7 @@
-package heraclite;
+package heraclite.gui;
 
 public interface GUI {
 
   public void init();
   public void display();
-  public void destroy();
 }

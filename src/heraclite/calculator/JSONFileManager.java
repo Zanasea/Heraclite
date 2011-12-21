@@ -1,8 +1,12 @@
-package heraclite;
+package heraclite.calculator;
+
+import heraclite.dto.Extrant;
+import heraclite.dto.Intrant;
 
 import java.io.File;
 import java.io.IOException;
 import org.codehaus.jackson.map.ObjectMapper;
+
 
 public class JSONFileManager implements PersistanceManager {
 

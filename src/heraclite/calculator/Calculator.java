@@ -1,7 +1,12 @@
-package heraclite;
+package heraclite.calculator;
+
+import heraclite.dto.Amortissement;
+import heraclite.dto.Extrant;
+import heraclite.dto.Intrant;
 
 import java.math.RoundingMode;
 import java.math.BigDecimal;
+
 import static java.math.BigDecimal.ONE;
 
 /**

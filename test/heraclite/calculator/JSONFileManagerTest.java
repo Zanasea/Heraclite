@@ -1,8 +1,8 @@
-package heraclite;
+package heraclite.calculator;
 
-import heraclite.Extrant;
-import heraclite.JSONFileManager;
-import heraclite.PersistanceManager;
+import heraclite.calculator.JSONFileManager;
+import heraclite.calculator.PersistanceManager;
+import heraclite.dto.Extrant;
 
 import java.io.File;
 import org.codehaus.jackson.JsonEncoding;
@@ -11,6 +11,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class JSONFileManagerTest {
 

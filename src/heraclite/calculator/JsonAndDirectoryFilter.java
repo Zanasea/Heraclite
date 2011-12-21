@@ -1,4 +1,4 @@
-package heraclite;
+package heraclite.calculator;
 
 import java.io.File;
 import java.io.FileFilter;
