@@ -43,11 +43,13 @@ public class Main {
       gui.display();
 
       ServerSocket server = new ServerSocket(4444);
-      Socket socket = server.accept();
-      PrintWriter writer = new PrintWriter(socket.getOutputStream());
-      writer.println("réponse en provenance du téléphone.");
-      writer.close();
-      socket.close();
+      while (true) {
+        Socket socket = server.accept();
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        writer.println("réponse en provenance du téléphone.");
+        writer.close();
+        socket.close();
+      }
     }
   }
 
