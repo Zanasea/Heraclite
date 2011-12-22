@@ -4,6 +4,7 @@ import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class AmortissementTable extends JTable {
 
@@ -13,8 +14,11 @@ public class AmortissementTable extends JTable {
     super(rows, columns);
   }
   
-  public void removeData() {
-    this.removeRowSelectionInterval(0, this.getRowCount() - 1);
+  public void clearData() {
+    DefaultTableModel model = (DefaultTableModel)this.getModel();
+    while (model.getRowCount() > 0) {
+      model.removeRow(0);
+    }
   }
   
   public void addData(Extrant extrant) {
