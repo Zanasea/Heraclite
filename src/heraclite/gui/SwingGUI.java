@@ -102,14 +102,16 @@ public class SwingGUI extends JFrame implements GUI {
 
     JButton run = new JButton("Run");
     panel.add(run);
-
+    
+    final JTextField ip = new JTextField("127.0.0.1");
+    panel.add(ip);
     JButton connect = new JButton("Connect");
     connect.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
         try {
-          ConnectionInformations ci = new ConnectionInformations("Zan", "127.0.0.1");
+          ConnectionInformations ci = new ConnectionInformations("Zan", ip.getText());
           ci.connect();
           BufferedInputStream inputStream = new BufferedInputStream(ci.getConnection().getInputStream());
           int c = 0;
