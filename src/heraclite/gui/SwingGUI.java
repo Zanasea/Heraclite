@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,13 +21,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import network.ConnectionInformations;
+
 public class SwingGUI extends JFrame implements GUI {
 
   private static final long serialVersionUID = 1L;
   private AmortissementTable table;
-  
-  
-  
+
   @Override
   public void init() {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +102,26 @@ public class SwingGUI extends JFrame implements GUI {
 
     JButton run = new JButton("Run");
     panel.add(run);
+
+    JButton connect = new JButton("Connect");
+    connect.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        try {
+          ConnectionInformations ci = new ConnectionInformations("Zan", "127.0.0.1");
+          ci.connect();
+          BufferedInputStream inputStream = new BufferedInputStream(ci.getConnection().getInputStream());
+          int c = 0;
+          while ((c = inputStream.read()) != -1) {
+            System.out.print((char)c);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+    panel.add(connect);
     return panel;
   }
 

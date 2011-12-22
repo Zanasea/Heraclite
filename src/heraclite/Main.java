@@ -8,6 +8,9 @@ import heraclite.gui.GUI;
 import heraclite.gui.SwingGUI;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Main {
 
@@ -38,6 +41,13 @@ public class Main {
       GUI gui = new SwingGUI();
       gui.init();
       gui.display();
+
+      ServerSocket server = new ServerSocket(4444);
+      Socket socket = server.accept();
+      PrintWriter writer = new PrintWriter(socket.getOutputStream());
+      writer.println("réponse en provenance du téléphone.");
+      writer.close();
+      socket.close();
     }
   }
 
