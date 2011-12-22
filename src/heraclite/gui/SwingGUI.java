@@ -1,5 +1,8 @@
 package heraclite.gui;
 
+import heraclite.gui.amortissement.AmortissementHeader;
+import heraclite.gui.amortissement.AmortissementTable;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,10 +10,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class SwingGUI extends JFrame implements GUI {
@@ -25,69 +29,89 @@ public class SwingGUI extends JFrame implements GUI {
 
     GridBagLayout mainFrameLayout = new GridBagLayout();
     this.setLayout(mainFrameLayout);
-    
 
     JPanel folderInputPanel = createFolderInputPanel();
-    JPanel amortissementPanel = createAmortissementPanel();
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 0;     
-    constraints.gridheight = 1;
-    constraints.gridwidth = 1;
-    constraints.fill = GridBagConstraints.NONE;
-    constraints.anchor = GridBagConstraints.NORTHWEST;
-    constraints.weightx = 0.0;
-    constraints.weighty = 0.0;   
+    GridBagConstraints constraints = ConstraintsFactory.createFolderInput();
     this.add(folderInputPanel, constraints);
     
-    constraints = new GridBagConstraints();
-    constraints.gridx = 1;
-    constraints.gridy = 0;    
-    constraints.gridheight = GridBagConstraints.REMAINDER;
-    constraints.gridwidth = GridBagConstraints.REMAINDER;
-    constraints.fill = GridBagConstraints.BOTH;
-    constraints.weightx = 1.0;
-    constraints.weighty = 1.0;
+    JPanel amortissementPanel = createAmortissementPanel();
+    constraints = ConstraintsFactory.createAmortissement();
     this.add(amortissementPanel, constraints);
+
+    JPanel buttonsPanel = createButtonsPanel();
+    constraints = ConstraintsFactory.createButtons();
+    this.add(buttonsPanel, constraints);
+    
     this.pack();
   }
-  
-  private JPanel createFolderInputPanel() {
-    JPanel folderInputPanel = new JPanel();
-    folderInputPanel.setBorder(BorderFactory.createTitledBorder("Program Arguments"));
-    folderInputPanel.setPreferredSize(new Dimension(260, 80));
-    GridLayout folderInputLayout = new GridLayout(3, 2);
-    folderInputPanel.setLayout(folderInputLayout);
 
-    folderInputPanel.add(new JLabel("Input Folder:"));
+  private JPanel createFolderInputPanel() {
+    JPanel panel = new JPanel();
+    panel.setBorder(BorderFactory.createTitledBorder("Program Arguments"));
+    panel.setPreferredSize(new Dimension(400, 80));
+    GridBagLayout folderInputLayout = new GridBagLayout();
+    panel.setLayout(folderInputLayout);
+
+    Dimension textFieldDimension = new Dimension(300, 20);
+    
+    panel.add(new JLabel("Input Folder:"), ConstraintsFactory.createInputLabel());
     JTextField inputFolder = new JTextField();
-    folderInputPanel.add(inputFolder);
-    folderInputPanel.add(new JLabel("Json output folder:"));
+    inputFolder.setPreferredSize(textFieldDimension);
+    panel.add(inputFolder, ConstraintsFactory.createInputText());
+    JButton inputButton = new JButton("Parcourir");
+    panel.add(inputButton,  ConstraintsFactory.createInputButton());
+    
+    panel.add(new JLabel("Json output folder:"),  ConstraintsFactory.createOutputLabel());
     JTextField outputFolder = new JTextField();
-    folderInputPanel.add(outputFolder);
-    folderInputPanel.add(new JLabel("HTML output folder:"));
+    outputFolder.setPreferredSize(textFieldDimension);
+    panel.add(outputFolder, ConstraintsFactory.createOutputText());
+    JButton outputButton = new JButton("Parcourir");
+    panel.add(outputButton,  ConstraintsFactory.createOutputButton());
+    
+    panel.add(new JLabel("HTML output folder:"), ConstraintsFactory.createHtmlLabel());
     JTextField htmlOutputFolder = new JTextField();
-    folderInputPanel.add(htmlOutputFolder);
-    return folderInputPanel;
+    htmlOutputFolder.setPreferredSize(textFieldDimension);
+    panel.add(htmlOutputFolder, ConstraintsFactory.createHtmlText());
+    JButton htmlButton = new JButton("Parcourir");
+    panel.add(htmlButton,  ConstraintsFactory.createHtmlButton());
+    return panel;
+  }
+
+  private JPanel createButtonsPanel() {
+    JPanel panel = new JPanel();
+    panel.setBorder(BorderFactory.createTitledBorder("Buttons"));
+    panel.setPreferredSize(new Dimension(260, 80));
+    GridLayout folderInputLayout = new GridLayout(2, 3);
+    panel.setLayout(folderInputLayout);
+
+    JButton clearTable = new JButton("Clear Table");
+    panel.add(clearTable);
+    JButton run = new JButton("Run");
+    panel.add(run);
+    return panel;
   }
   
+
   private JPanel createAmortissementPanel() {
-    JPanel amortissementPanel = new JPanel();
-    amortissementPanel.setPreferredSize(new Dimension(500, 500));
-    amortissementPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    JPanel panel = new JPanel();
+    panel.setPreferredSize(new Dimension(500, 500));
+    panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
     GridLayout amortissementLayout = new GridLayout(1, 1);
-    amortissementPanel.setLayout(amortissementLayout);
+    panel.setLayout(amortissementLayout);
 
-    JTable amortissement = new JTable(1, 2);
-    amortissement.setBorder(BorderFactory.createBevelBorder(0));
-    amortissement.setValueAt("blah", 0, 0);
-    amortissementPanel.add(amortissement);
-    
-    amortissement.setPreferredSize(new Dimension(100, 100));
-    amortissement.setLocation(0, 0);
-    return amortissementPanel;
+    AmortissementTable table = new AmortissementTable(1, AmortissementHeader.values().length);
+    for (int i = 0; i < table.getColumnCount(); i++) {
+      table.getColumnModel().getColumn(i).setHeaderValue(AmortissementHeader.values()[i]);
+    }
+    table.setBorder(BorderFactory.createBevelBorder(0));
+    table.setValueAt("blah", 0, 0);
+
+    JScrollPane scrollPane = new JScrollPane(table);
+
+    panel.add(scrollPane);
+
+    return panel;
   }
 
   @Override

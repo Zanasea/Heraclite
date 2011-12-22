@@ -2,6 +2,8 @@ package heraclite.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 /**
@@ -92,5 +94,18 @@ public class Amortissement {
 
   public void setVersementTotal(BigDecimal versementTotal) {
     this.versementTotal = versementTotal;
+  }
+
+  /*
+   * private int periode; private BigDecimal capitalDebut; private BigDecimal
+   * versementTotal; private BigDecimal versementTotalCumulatif; private
+   * BigDecimal versementInteret; private BigDecimal versementInteretCumulatif;
+   * private BigDecimal versementCapital; private BigDecimal
+   * versementCapitalCumulatif; private BigDecimal capitalFin;
+   */
+  @JsonIgnore
+  public String[] toArray() {
+    return new String[] { String.valueOf(periode), capitalDebut.toString(), versementTotal.toString(), versementTotalCumulatif.toString(), versementInteret.toString(),
+        versementInteretCumulatif.toString(), versementCapital.toString(), versementCapitalCumulatif.toString(), capitalFin.toString() };
   }
 }
