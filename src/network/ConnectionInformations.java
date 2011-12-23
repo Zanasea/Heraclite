@@ -1,16 +1,9 @@
-/**
- * 
- */
 package network;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-/**
- * @author JF
- * 
- */
 public class ConnectionInformations implements Connection {
   private static final int PORT_NUMBER = 4444;
 
