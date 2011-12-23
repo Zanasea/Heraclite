@@ -1,5 +1,6 @@
 package heraclite.calculator;
 
+import heraclite.Main;
 import heraclite.calculator.Calculator;
 import heraclite.calculator.JSONFileManager;
 import heraclite.calculator.PersistanceManager;
@@ -7,6 +8,8 @@ import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
@@ -82,4 +85,31 @@ public class CalculatorTest {
     private void assertValueIsRight(Object expectedResult, Object actualResult) {
         Assert.assertEquals(expectedResult, actualResult);
     }
+
+    @Test
+    public void testParseFinalOutputDirectoryMethod() throws Exception {
+        Method parseFinalOutputDirectory = prepareParseFinalOutputDirectoryMethod();
+        assertParentDirectoryIsAccuratelyParsed(parseFinalOutputDirectory);
+    }
+
+    private Method prepareParseFinalOutputDirectoryMethod() throws Exception {
+        Method parseFinalOutputDirectory = Calculator.class.getDeclaredMethod("parseFinalOutputDirectory", File.class, File.class);
+        Field inputDirectory = Calculator.class.getDeclaredField("inputDirectory");
+        Field originalOutputDirectory = Calculator.class.getDeclaredField("originalOutputDirectory");
+        parseFinalOutputDirectory.setAccessible(true);
+        inputDirectory.setAccessible(true);
+        originalOutputDirectory.setAccessible(true);
+        inputDirectory.set(classUnderTest, new File("resources"));
+        originalOutputDirectory.set(classUnderTest, new File("testResults"));
+        return parseFinalOutputDirectory;
+    }
+
+    private void assertParentDirectoryIsAccuratelyParsed(Method parseFinalOutputDirectory) throws Exception {
+        File inputFile = new File("resources/subFolder/jsonTest from subfolder.json");
+        File expectedResult = new File("testResults/subFolder/");
+        File outputDirectory = new File("testResults/");
+        File testResult = (File)parseFinalOutputDirectory.invoke(classUnderTest, inputFile, outputDirectory);
+        Assert.assertEquals(expectedResult.getAbsolutePath(), testResult.getAbsolutePath());
+    }
 }
+

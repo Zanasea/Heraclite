@@ -1,5 +1,8 @@
 package heraclite.gui;
 
+import heraclite.calculator.Calculator;
+import heraclite.dto.Amortissement;
+import heraclite.dto.Extrant;
 import heraclite.gui.amortissement.AmortissementHeader;
 import heraclite.gui.amortissement.AmortissementTable;
 
@@ -11,7 +14,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import network.ConnectionInformations;
 
@@ -27,6 +30,9 @@ public class SwingGUI extends JFrame implements GUI {
 
   private static final long serialVersionUID = 1L;
   private AmortissementTable table;
+  private JTextField inputFolder;
+  private JTextField outputFolder;
+  private JTextField htmlOutputFolder;
 
   @Override
   public void init() {
@@ -62,21 +68,21 @@ public class SwingGUI extends JFrame implements GUI {
     Dimension textFieldDimension = new Dimension(300, 20);
 
     panel.add(new JLabel("Input Folder:"), ConstraintsFactory.createInputLabel());
-    JTextField inputFolder = new JTextField();
+    inputFolder = new JTextField("resources");
     inputFolder.setPreferredSize(textFieldDimension);
     panel.add(inputFolder, ConstraintsFactory.createInputText());
     JButton inputButton = new JButton("Parcourir");
     panel.add(inputButton, ConstraintsFactory.createInputButton());
 
     panel.add(new JLabel("Json output folder:"), ConstraintsFactory.createOutputLabel());
-    JTextField outputFolder = new JTextField();
+    outputFolder = new JTextField("results");
     outputFolder.setPreferredSize(textFieldDimension);
     panel.add(outputFolder, ConstraintsFactory.createOutputText());
     JButton outputButton = new JButton("Parcourir");
     panel.add(outputButton, ConstraintsFactory.createOutputButton());
 
     panel.add(new JLabel("HTML output folder:"), ConstraintsFactory.createHtmlLabel());
-    JTextField htmlOutputFolder = new JTextField();
+    htmlOutputFolder = new JTextField("htmlResults");
     htmlOutputFolder.setPreferredSize(textFieldDimension);
     panel.add(htmlOutputFolder, ConstraintsFactory.createHtmlText());
     JButton htmlButton = new JButton("Parcourir");
@@ -101,8 +107,16 @@ public class SwingGUI extends JFrame implements GUI {
     panel.add(clearTable);
 
     JButton run = new JButton("Run");
+    run.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        String[] args = {inputFolder.getText(), outputFolder.getText(), htmlOutputFolder.getText()};
+        Calculator.calculate(args);
+      }
+    });
     panel.add(run);
-    
+
     final JTextField ip = new JTextField("127.0.0.1");
     panel.add(ip);
     JButton connect = new JButton("Connect");
@@ -116,7 +130,7 @@ public class SwingGUI extends JFrame implements GUI {
           BufferedInputStream inputStream = new BufferedInputStream(ci.getConnection().getInputStream());
           int c = 0;
           while ((c = inputStream.read()) != -1) {
-            System.out.print((char)c);
+            System.out.print((char) c);
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -129,19 +143,16 @@ public class SwingGUI extends JFrame implements GUI {
 
   private JPanel createAmortissementPanel() {
     JPanel panel = new JPanel();
-    panel.setPreferredSize(new Dimension(500, 500));
     panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
     GridLayout amortissementLayout = new GridLayout(1, 1);
     panel.setLayout(amortissementLayout);
 
-    table = new AmortissementTable(1, AmortissementHeader.values().length);
+    table = new AmortissementTable(0, AmortissementHeader.values().length);
     for (int i = 0; i < table.getColumnCount(); i++) {
       table.getColumnModel().getColumn(i).setHeaderValue(AmortissementHeader.values()[i]);
     }
     table.setBorder(BorderFactory.createBevelBorder(0));
-    table.setValueAt("blah", 0, 0);
-
     JScrollPane scrollPane = new JScrollPane(table);
 
     panel.add(scrollPane);
@@ -152,6 +163,14 @@ public class SwingGUI extends JFrame implements GUI {
   @Override
   public void display() {
     this.setVisible(true);
+  }
+  
+  synchronized public void addExtrant(Extrant extrant) {
+    DefaultTableModel model = (DefaultTableModel)table.getModel();
+    for (Amortissement ammortissement : extrant.getAmortissement()) {
+      String[] rowData = ammortissement.toArray();
+      model.addRow(rowData);
+    }
   }
 
 }

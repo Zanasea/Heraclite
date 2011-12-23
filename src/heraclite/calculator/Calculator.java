@@ -1,13 +1,16 @@
 package heraclite.calculator;
 
+import static java.math.BigDecimal.ONE;
 import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
 import heraclite.dto.Intrant;
+import heraclite.gui.GUI;
 
-import java.math.RoundingMode;
+import java.io.File;
 import java.math.BigDecimal;
-
-import static java.math.BigDecimal.ONE;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe permettant de calculer les modalités de remboursement du prêt pour
@@ -18,7 +21,31 @@ public class Calculator extends Thread {
   private Intrant intrant;
   private Extrant extrant;
   private PersistanceManager persistanceManager;
+  
+  private static List<GUI> guis = new ArrayList<GUI>();
+  private static File inputDirectory;
+  private static File originalOutputDirectory;
+  private static File originalHtmlOutputDirectory;
 
+  public static void calculate(String[] args) {
+    inputDirectory = new File(args[0]);
+    originalOutputDirectory = new File(args[1]);
+    originalHtmlOutputDirectory = new File(args[2]);
+
+    SourceReader sourceReader = new SourceReader(inputDirectory);
+
+    while (sourceReader.hasNext()) {
+      final File inputFile = sourceReader.next();
+
+      File outputDirectory = parseFinalOutputDirectory(inputFile, originalOutputDirectory);
+      File htmlOutputDirectory = parseFinalOutputDirectory(inputFile, originalHtmlOutputDirectory);
+
+      PersistanceManager persistanceManager = new JSONFileManager(inputFile, outputDirectory, htmlOutputDirectory);
+      Calculator calculator = new Calculator(persistanceManager);
+      calculator.start();
+    }
+  }
+  
   public Calculator(PersistanceManager persistanceManager) {
     this.persistanceManager = persistanceManager;
   }
@@ -29,7 +56,14 @@ public class Calculator extends Thread {
     if (intrant != null) {
       extrant = new Extrant(intrant);
       calculerExtrant();
+      fireExtrantCalculated();
       persistanceManager.write(extrant);
+    }
+  }
+  
+  private void fireExtrantCalculated() {
+    for (GUI gui : guis) {
+      gui.addExtrant(extrant);
     }
   }
 
@@ -96,5 +130,25 @@ public class Calculator extends Thread {
 
       startingCapital = endingCapital;
     }
+  }
+
+  private static  File parseFinalOutputDirectory(File inputFile, File outputDirectory) {
+    String filePath = inputFile.getAbsolutePath();
+    filePath = removeParentDirectoryFromAbsolutePath(filePath, inputDirectory);
+    filePath = removeFileNameFromPath(filePath, inputFile);
+    String resultingParentDirectory = outputDirectory.getAbsolutePath() + filePath;
+    return new File(resultingParentDirectory);
+  }
+
+  private static String removeFileNameFromPath(String path, File file) {
+    return path.substring(0, path.lastIndexOf(file.getName()));
+  }
+
+  private static String removeParentDirectoryFromAbsolutePath(String path, File directory) {
+    return path.substring(directory.getAbsolutePath().length());
+  }
+  
+  public static void registerGUI(GUI gui) {
+    guis.add(gui);
   }
 }
