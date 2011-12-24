@@ -1,13 +1,9 @@
 package heraclite;
 
 import heraclite.calculator.Calculator;
-import heraclite.calculator.JSONFileManager;
-import heraclite.calculator.PersistanceManager;
-import heraclite.calculator.SourceReader;
 import heraclite.gui.GUI;
 import heraclite.gui.SwingGUI;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
