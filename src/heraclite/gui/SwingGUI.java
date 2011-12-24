@@ -5,6 +5,7 @@ import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
 import heraclite.gui.amortissement.AmortissementHeader;
 import heraclite.gui.amortissement.AmortissementTable;
+import heraclite.gui.listeners.ConnectButtonListener;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,7 +14,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -23,8 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
-import network.ConnectionInformations;
 
 public class SwingGUI extends JFrame implements GUI {
 
@@ -36,67 +34,120 @@ public class SwingGUI extends JFrame implements GUI {
 
   @Override
   public void init() {
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setPreferredSize(new Dimension(640, 480));
-    this.setLocationByPlatform(true);
-
-    GridBagLayout mainFrameLayout = new GridBagLayout();
-    this.setLayout(mainFrameLayout);
-
-    JPanel folderInputPanel = createFolderInputPanel();
-    GridBagConstraints constraints = ConstraintsFactory.createFolderInput();
-    this.add(folderInputPanel, constraints);
-
-    JPanel amortissementPanel = createAmortissementPanel();
-    constraints = ConstraintsFactory.createAmortissement();
-    this.add(amortissementPanel, constraints);
-
-    JPanel buttonsPanel = createButtonsPanel();
-    constraints = ConstraintsFactory.createButtons();
-    this.add(buttonsPanel, constraints);
+    Calculator.registerGUI(this);
+    setUpFrameParameteres();
+    addFoldersSelectionFields();
+    addAmortissementTablePanel();
+    addControlButtonsPanel();
 
     this.pack();
   }
 
-  private JPanel createFolderInputPanel() {
+  private void setUpFrameParameteres() {
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setPreferredSize(new Dimension(640, 480));
+    this.setLocationByPlatform(true);
+    this.setLayout(new GridBagLayout());
+  }
+
+  private void addFoldersSelectionFields() {
+    JPanel folderInputPanel = createFoldersSelectionFields();
+    GridBagConstraints constraints = ConstraintsFactory.createFolderInput();
+    this.add(folderInputPanel, constraints);
+  }
+
+  private JPanel createFoldersSelectionFields() {
+    JPanel panel = createFoldersInputsPanel();
+    addInputFolder(panel);
+    addOutputFolder(panel);
+    addHtmlOutputFolder(panel);
+    return panel;
+  }
+
+  private JPanel createFoldersInputsPanel() {
     JPanel panel = new JPanel();
     panel.setBorder(BorderFactory.createTitledBorder("Program Arguments"));
     panel.setPreferredSize(new Dimension(400, 80));
     GridBagLayout folderInputLayout = new GridBagLayout();
     panel.setLayout(folderInputLayout);
+    return panel;
+  }
 
-    Dimension textFieldDimension = new Dimension(300, 20);
-
+  private void addInputFolder(JPanel panel) {
     panel.add(new JLabel("Input Folder:"), ConstraintsFactory.createInputLabel());
     inputFolder = new JTextField("resources");
-    inputFolder.setPreferredSize(textFieldDimension);
+    inputFolder.setName("inputFolder");
     panel.add(inputFolder, ConstraintsFactory.createInputText());
     JButton inputButton = new JButton("Parcourir");
     panel.add(inputButton, ConstraintsFactory.createInputButton());
+  }
 
+  private void addOutputFolder(JPanel panel) {
     panel.add(new JLabel("Json output folder:"), ConstraintsFactory.createOutputLabel());
     outputFolder = new JTextField("results");
-    outputFolder.setPreferredSize(textFieldDimension);
+    outputFolder.setName("outputFolder");
     panel.add(outputFolder, ConstraintsFactory.createOutputText());
     JButton outputButton = new JButton("Parcourir");
     panel.add(outputButton, ConstraintsFactory.createOutputButton());
+  }
 
+  private void addHtmlOutputFolder(JPanel panel) {
     panel.add(new JLabel("HTML output folder:"), ConstraintsFactory.createHtmlLabel());
     htmlOutputFolder = new JTextField("htmlResults");
-    htmlOutputFolder.setPreferredSize(textFieldDimension);
+    htmlOutputFolder.setName("htmlOutputFolder");
     panel.add(htmlOutputFolder, ConstraintsFactory.createHtmlText());
     JButton htmlButton = new JButton("Parcourir");
     panel.add(htmlButton, ConstraintsFactory.createHtmlButton());
+  }
+
+  private void addAmortissementTablePanel() {
+    JPanel amortissementPanel = createAmortissementPanel();
+    amortissementPanel.add(createAmortissementTable());
+    this.add(amortissementPanel, ConstraintsFactory.createAmortissement());
+  }
+
+  private JPanel createAmortissementPanel() {
+    JPanel panel = new JPanel();
+    panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    panel.setLayout(new GridLayout(1, 1));
     return panel;
+  }
+
+  private JScrollPane createAmortissementTable() {
+    table = new AmortissementTable(0, AmortissementHeader.values().length);
+    setAmortissementTableHeaderValues();
+    table.setBorder(BorderFactory.createBevelBorder(0));
+    return new JScrollPane(table);
+  }
+
+  private void setAmortissementTableHeaderValues() {
+    for (int i = 0; i < table.getColumnCount(); i++) {
+      table.getColumnModel().getColumn(i).setHeaderValue(AmortissementHeader.values()[i]);
+    }
+  }
+
+  private void addControlButtonsPanel() {
+    JPanel buttonsPanel = createButtonsPanel();
+    addControlButtons(buttonsPanel);
+    this.add(buttonsPanel, ConstraintsFactory.createButtons());
   }
 
   private JPanel createButtonsPanel() {
     JPanel panel = new JPanel();
     panel.setBorder(BorderFactory.createTitledBorder("Buttons"));
     panel.setPreferredSize(new Dimension(260, 80));
-    GridLayout folderInputLayout = new GridLayout(2, 3);
-    panel.setLayout(folderInputLayout);
+    panel.setLayout(new GridLayout(2, 3));
+    return panel;
+  }
 
+  private void addControlButtons(JPanel panel) {
+    addClearTableButton(panel);
+    addRunButton(panel);
+    JButton connect = addConnectButton(panel);
+    panel.add(connect);
+  }
+
+  private void addClearTableButton(JPanel panel) {
     JButton clearTable = new JButton("Clear Table");
     clearTable.addActionListener(new ActionListener() {
       @Override
@@ -105,10 +156,11 @@ public class SwingGUI extends JFrame implements GUI {
       }
     });
     panel.add(clearTable);
+  }
 
+  private void addRunButton(JPanel panel) {
     JButton run = new JButton("Run");
     run.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(ActionEvent arg0) {
         String[] args = {inputFolder.getText(), outputFolder.getText(), htmlOutputFolder.getText()};
@@ -116,48 +168,14 @@ public class SwingGUI extends JFrame implements GUI {
       }
     });
     panel.add(run);
+  }
 
+  private JButton addConnectButton(JPanel panel) {
     final JTextField ip = new JTextField("127.0.0.1");
     panel.add(ip);
     JButton connect = new JButton("Connect");
-    connect.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        try {
-          ConnectionInformations ci = new ConnectionInformations("Zan", ip.getText());
-          ci.connect();
-          BufferedInputStream inputStream = new BufferedInputStream(ci.getConnection().getInputStream());
-          int c = 0;
-          while ((c = inputStream.read()) != -1) {
-            System.out.print((char) c);
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
-    panel.add(connect);
-    return panel;
-  }
-
-  private JPanel createAmortissementPanel() {
-    JPanel panel = new JPanel();
-    panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-    GridLayout amortissementLayout = new GridLayout(1, 1);
-    panel.setLayout(amortissementLayout);
-
-    table = new AmortissementTable(0, AmortissementHeader.values().length);
-    for (int i = 0; i < table.getColumnCount(); i++) {
-      table.getColumnModel().getColumn(i).setHeaderValue(AmortissementHeader.values()[i]);
-    }
-    table.setBorder(BorderFactory.createBevelBorder(0));
-    JScrollPane scrollPane = new JScrollPane(table);
-
-    panel.add(scrollPane);
-
-    return panel;
+    connect.addActionListener(new ConnectButtonListener(ip));
+    return connect;
   }
 
   @Override

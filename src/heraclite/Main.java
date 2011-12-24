@@ -19,7 +19,6 @@ public class Main {
       Calculator.calculate(args);
     } else {
       GUI gui = new SwingGUI();
-      Calculator.registerGUI(gui);
       gui.init();
       gui.display();
 
