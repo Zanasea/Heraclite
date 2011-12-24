@@ -14,22 +14,22 @@ public class AmortissementTable extends JTable {
     super(rows, columns);
   }
   
-  public void clearData() {
-    DefaultTableModel model = (DefaultTableModel)this.getModel();
-    while (model.getRowCount() > 0) {
-      model.removeRow(0);
-    }
+  synchronized public void clearAndAddData(Extrant extrant) {
+    clearData();
+    addData(extrant);
   }
-  
-  public void addData(Extrant extrant) {
-    int j = 0;
+
+  synchronized public void clearData() {
+    DefaultTableModel model = (DefaultTableModel) this.getModel();
+    model.setRowCount(0);
+  }
+
+  synchronized public void addData(Extrant extrant) {
+    DefaultTableModel model = (DefaultTableModel) this.dataModel;
     for (Amortissement amortissement : extrant.getAmortissement()) {
       String[] values = amortissement.toArray();
-      for (int i = 0; i < this.getColumnCount(); i++) {
-        this.setValueAt(values[i], j, i);
-      }
-      j++;
+      model.addRow(values);
     }
   }
-  
+
 }

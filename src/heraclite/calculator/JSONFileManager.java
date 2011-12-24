@@ -35,20 +35,24 @@ public class JSONFileManager implements PersistanceManager {
   }
 
   @Override
-  public Intrant read() {
+  public Intrant read() throws RuntimeException {
     Intrant intrant = null;
     try {
       intrant = mapper.readValue(jsonFile, Intrant.class);
     } catch (IOException exception) {
-      System.err.println("The JSON file : " + jsonFile.getName() + " you provided is not valid.");
-      System.err.println("It will not produce a result.");
-      System.err.println("For your convenience, here is the exception message :" + System.getProperty("line.separator") + exception.getMessage());
+      StringBuilder message = new StringBuilder();
+      message.append("The JSON file : " + jsonFile.getName() + " you provided is not valid." + System.getProperty("line.separator"));
+      message.append("It will not produce a result." + System.getProperty("line.separator"));
+      message.append("For your convenience, here is the exception message :" + System.getProperty("line.separator") + exception.getMessage() + System.getProperty("line.separator"));
+      RuntimeException re = new RuntimeException(message.toString());
+      re.addSuppressed(exception);
+      throw re;
     }
     return intrant;
   }
 
   @Override
-  public void write(Extrant extrant) {
+  public void write(Extrant extrant) throws RuntimeException  {
     try {
       File file = new File(outputDirectory, jsonFile.getName());
       File htmlFile = new File(htmlOutputDirectory, jsonFile.getName());
@@ -57,8 +61,12 @@ public class JSONFileManager implements PersistanceManager {
       file.createNewFile();
       mapper.defaultPrettyPrintingWriter().writeValue(file, extrant);
     } catch (IOException exception) {
-      System.err.println("We could not write the result of the JSON file : " + jsonFile.getName());
-      System.err.println("For your convenience, here is the exception message :" + System.getProperty("line.separator") + exception.getMessage());
+      StringBuilder message = new StringBuilder();
+      message.append("We could not write the result of the JSON file : " + jsonFile.getName() + System.getProperty("line.separator"));
+      message.append("For your convenience, here is the exception message :" + System.getProperty("line.separator") + exception.getMessage() + System.getProperty("line.separator"));
+      RuntimeException re = new RuntimeException(message.toString());
+      re.addSuppressed(exception);
+      throw re;
     }
   }
 

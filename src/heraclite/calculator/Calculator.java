@@ -21,7 +21,7 @@ public class Calculator extends Thread {
   private Intrant intrant;
   private Extrant extrant;
   private PersistanceManager persistanceManager;
-  
+
   private static List<GUI> guis = new ArrayList<GUI>();
   private static File inputDirectory;
   private static File originalOutputDirectory;
@@ -45,22 +45,22 @@ public class Calculator extends Thread {
       calculator.start();
     }
   }
-  
+
   public Calculator(PersistanceManager persistanceManager) {
     this.persistanceManager = persistanceManager;
   }
 
   @Override
   public void run() {
-    intrant = persistanceManager.read();
-    if (intrant != null) {
-      extrant = new Extrant(intrant);
-      calculerExtrant();
-      fireExtrantCalculated();
-      persistanceManager.write(extrant);
-    }
+      intrant = persistanceManager.read();
+      if (intrant != null) {
+        extrant = new Extrant(intrant);
+        calculerExtrant();
+        persistanceManager.write(extrant);
+        fireExtrantCalculated();
+      }
   }
-  
+
   private void fireExtrantCalculated() {
     for (GUI gui : guis) {
       gui.addExtrant(extrant);
@@ -132,7 +132,7 @@ public class Calculator extends Thread {
     }
   }
 
-  private static  File parseFinalOutputDirectory(File inputFile, File outputDirectory) {
+  private static File parseFinalOutputDirectory(File inputFile, File outputDirectory) {
     String filePath = inputFile.getAbsolutePath();
     filePath = removeParentDirectoryFromAbsolutePath(filePath, inputDirectory);
     filePath = removeFileNameFromPath(filePath, inputFile);
@@ -147,7 +147,7 @@ public class Calculator extends Thread {
   private static String removeParentDirectoryFromAbsolutePath(String path, File directory) {
     return path.substring(directory.getAbsolutePath().length());
   }
-  
+
   public static void registerGUI(GUI gui) {
     guis.add(gui);
   }

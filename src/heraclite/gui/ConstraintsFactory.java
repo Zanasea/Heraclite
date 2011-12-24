@@ -46,6 +46,28 @@ public class ConstraintsFactory {
     return constraints;
   }
 
+  public static GridBagConstraints createAmortissementSelector() {
+    GridBagConstraints constraints;
+    constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    return constraints;
+  }
+
+  public static GridBagConstraints createAmortissementTable() {
+    GridBagConstraints constraints;
+    constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 1;
+    constraints.gridheight = GridBagConstraints.REMAINDER;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    constraints.fill = GridBagConstraints.BOTH;
+    constraints.weightx = 1.0;
+    constraints.weighty = 1.0;
+    return constraints;
+  }
+
   public static GridBagConstraints createInputLabel() {
     GridBagConstraints constraints;
     constraints = new GridBagConstraints();

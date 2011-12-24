@@ -1,15 +1,12 @@
 package heraclite.gui;
 
 import heraclite.calculator.Calculator;
-import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
-import heraclite.gui.amortissement.AmortissementHeader;
-import heraclite.gui.amortissement.AmortissementTable;
+import heraclite.gui.amortissement.AmortissementPanel;
 import heraclite.gui.listeners.BrowseButtonListener;
 import heraclite.gui.listeners.ConnectButtonListener;
 import heraclite.gui.listeners.RunButtonListener;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,14 +19,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 public class SwingGUI extends JFrame implements GUI {
 
   private static final long serialVersionUID = 1L;
-  private AmortissementTable table;
+  private AmortissementPanel tablePanel;
 
   @Override
   public void init() {
@@ -80,7 +75,7 @@ public class SwingGUI extends JFrame implements GUI {
     JTextField inputFolder = new JTextField("resources");
     inputFolder.setName("inputFolder");
     panel.add(inputFolder, ConstraintsFactory.createInputText());
-    JButton inputButton = new JButton("Parcourir");
+    JButton inputButton = new JButton("Browse");
     inputButton.setName("inputButton");
     inputButton.addActionListener(new BrowseButtonListener(inputFolder));
     panel.add(inputButton, ConstraintsFactory.createInputButton());
@@ -93,7 +88,7 @@ public class SwingGUI extends JFrame implements GUI {
     JTextField outputFolder = new JTextField("results");
     outputFolder.setName("outputFolder");
     panel.add(outputFolder, ConstraintsFactory.createOutputText());
-    JButton outputButton = new JButton("Parcourir");
+    JButton outputButton = new JButton("Browse");
     outputButton.setName("outputButton");
     outputButton.addActionListener(new BrowseButtonListener(outputFolder));
     panel.add(outputButton, ConstraintsFactory.createOutputButton());
@@ -106,36 +101,15 @@ public class SwingGUI extends JFrame implements GUI {
     JTextField htmlOutputFolder = new JTextField("htmlResults");
     htmlOutputFolder.setName("htmlOutputFolder");
     panel.add(htmlOutputFolder, ConstraintsFactory.createHtmlText());
-    JButton htmlButton = new JButton("Parcourir");
+    JButton htmlButton = new JButton("Browse");
     htmlButton.setName("htmlButton");
     htmlButton.addActionListener(new BrowseButtonListener(htmlOutputFolder));
     panel.add(htmlButton, ConstraintsFactory.createHtmlButton());
   }
 
   private void addAmortissementTablePanel() {
-    JPanel amortissementPanel = createAmortissementPanel();
-    amortissementPanel.add(createAmortissementTable());
-    this.add(amortissementPanel, ConstraintsFactory.createAmortissement());
-  }
-
-  private JPanel createAmortissementPanel() {
-    JPanel panel = new JPanel();
-    panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    panel.setLayout(new GridLayout(1, 1));
-    return panel;
-  }
-
-  private JScrollPane createAmortissementTable() {
-    table = new AmortissementTable(0, AmortissementHeader.values().length);
-    setAmortissementTableHeaderValues();
-    table.setBorder(BorderFactory.createBevelBorder(0));
-    return new JScrollPane(table);
-  }
-
-  private void setAmortissementTableHeaderValues() {
-    for (int i = 0; i < table.getColumnCount(); i++) {
-      table.getColumnModel().getColumn(i).setHeaderValue(AmortissementHeader.values()[i]);
-    }
+    tablePanel = new AmortissementPanel();
+    this.add(tablePanel, ConstraintsFactory.createAmortissement());
   }
 
   private void addControlButtonsPanel() {
@@ -164,7 +138,7 @@ public class SwingGUI extends JFrame implements GUI {
     clearTable.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        table.clearData();
+        tablePanel.clearExtrants();
       }
     });
     panel.add(clearTable);
@@ -190,11 +164,7 @@ public class SwingGUI extends JFrame implements GUI {
   }
   
   synchronized public void addExtrant(Extrant extrant) {
-    DefaultTableModel model = (DefaultTableModel)table.getModel();
-    for (Amortissement ammortissement : extrant.getAmortissement()) {
-      String[] rowData = ammortissement.toArray();
-      model.addRow(rowData);
-    }
+    tablePanel.addExtrant(extrant);
   }
 
 }
