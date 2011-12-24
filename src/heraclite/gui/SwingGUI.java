@@ -5,7 +5,9 @@ import heraclite.dto.Amortissement;
 import heraclite.dto.Extrant;
 import heraclite.gui.amortissement.AmortissementHeader;
 import heraclite.gui.amortissement.AmortissementTable;
+import heraclite.gui.listeners.BrowseButtonListener;
 import heraclite.gui.listeners.ConnectButtonListener;
+import heraclite.gui.listeners.RunButtonListener;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,9 +30,6 @@ public class SwingGUI extends JFrame implements GUI {
 
   private static final long serialVersionUID = 1L;
   private AmortissementTable table;
-  private JTextField inputFolder;
-  private JTextField outputFolder;
-  private JTextField htmlOutputFolder;
 
   @Override
   public void init() {
@@ -70,33 +69,46 @@ public class SwingGUI extends JFrame implements GUI {
     panel.setPreferredSize(new Dimension(400, 80));
     GridBagLayout folderInputLayout = new GridBagLayout();
     panel.setLayout(folderInputLayout);
+    panel.setName("folderInputPanel");
     return panel;
   }
 
   private void addInputFolder(JPanel panel) {
-    panel.add(new JLabel("Input Folder:"), ConstraintsFactory.createInputLabel());
-    inputFolder = new JTextField("resources");
+    JLabel inputLabel = new JLabel("Input Folder:");
+    inputLabel.setName("inputLabel");
+    panel.add(inputLabel, ConstraintsFactory.createInputLabel());
+    JTextField inputFolder = new JTextField("resources");
     inputFolder.setName("inputFolder");
     panel.add(inputFolder, ConstraintsFactory.createInputText());
     JButton inputButton = new JButton("Parcourir");
+    inputButton.setName("inputButton");
+    inputButton.addActionListener(new BrowseButtonListener(inputFolder));
     panel.add(inputButton, ConstraintsFactory.createInputButton());
   }
 
   private void addOutputFolder(JPanel panel) {
-    panel.add(new JLabel("Json output folder:"), ConstraintsFactory.createOutputLabel());
-    outputFolder = new JTextField("results");
+    JLabel outputLabel = new JLabel("Json output folder:");
+    outputLabel.setName("outputLabel");
+    panel.add(outputLabel, ConstraintsFactory.createOutputLabel());
+    JTextField outputFolder = new JTextField("results");
     outputFolder.setName("outputFolder");
     panel.add(outputFolder, ConstraintsFactory.createOutputText());
     JButton outputButton = new JButton("Parcourir");
+    outputButton.setName("outputButton");
+    outputButton.addActionListener(new BrowseButtonListener(outputFolder));
     panel.add(outputButton, ConstraintsFactory.createOutputButton());
   }
 
   private void addHtmlOutputFolder(JPanel panel) {
-    panel.add(new JLabel("HTML output folder:"), ConstraintsFactory.createHtmlLabel());
-    htmlOutputFolder = new JTextField("htmlResults");
+    JLabel htmlLabel = new JLabel("HTML output folder:");
+    htmlLabel.setName("htmlLabel");
+    panel.add(htmlLabel, ConstraintsFactory.createHtmlLabel());
+    JTextField htmlOutputFolder = new JTextField("htmlResults");
     htmlOutputFolder.setName("htmlOutputFolder");
     panel.add(htmlOutputFolder, ConstraintsFactory.createHtmlText());
     JButton htmlButton = new JButton("Parcourir");
+    htmlButton.setName("htmlButton");
+    htmlButton.addActionListener(new BrowseButtonListener(htmlOutputFolder));
     panel.add(htmlButton, ConstraintsFactory.createHtmlButton());
   }
 
@@ -160,13 +172,7 @@ public class SwingGUI extends JFrame implements GUI {
 
   private void addRunButton(JPanel panel) {
     JButton run = new JButton("Run");
-    run.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        String[] args = {inputFolder.getText(), outputFolder.getText(), htmlOutputFolder.getText()};
-        Calculator.calculate(args);
-      }
-    });
+    run.addActionListener(new RunButtonListener(this.getContentPane()));
     panel.add(run);
   }
 
