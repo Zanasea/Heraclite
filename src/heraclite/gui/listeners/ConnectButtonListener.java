@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
 
+import network.Connection;
 import network.ConnectionInformations;
 
 public class ConnectButtonListener implements ActionListener {
@@ -19,7 +20,8 @@ public class ConnectButtonListener implements ActionListener {
   public void actionPerformed(ActionEvent arg0) {
     try {
       ConnectionInformations ci = new ConnectionInformations("Zan", ip.getText());
-      ci.connect();
+      Connection connection = new Connection(ci);
+      connection.connect();
     } catch (Exception e) {
       e.printStackTrace();
     }
